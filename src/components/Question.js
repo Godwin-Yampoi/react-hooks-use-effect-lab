@@ -3,7 +3,38 @@ import React, { useState } from "react";
 function Question({ question, onAnswered }) {
   const [timeRemaining, setTimeRemaining] = useState(10);
 
-  // add useEffect code
+  import { useState, useEffect } from 'react';
+
+function Question({ onAnswered }) {
+  const [timeRemaining, setTimeRemaining] = useState(10);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setTimeRemaining(prevTime => prevTime - 1);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [timeRemaining]);
+
+  useEffect(() => {
+    if (timeRemaining === 0) {
+      setTimeRemaining(10);
+      onAnswered(false);
+    }
+  }, [timeRemaining, onAnswered]);
+
+  return (
+    <div>
+      <p>Time remaining: {timeRemaining}</p>
+      <p>What is the capital of France?</p>
+      <button onClick={() => onAnswered(true)}>Paris</button>
+      <button onClick={() => onAnswered(false)}>London</button>
+    </div>
+  );
+}
+
 
   function handleAnswer(isCorrect) {
     setTimeRemaining(10);
